@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -12,15 +15,14 @@ namespace Notissimus
     public partial class MainPage : ContentPage
     {
         public static List<Offer> Offers = new List<Offer>();
+        public static List<string> IDs = new List<string>();
+        public static XmlDocument document = new XmlDocument();
         public MainPage()
         {
             InitializeComponent();
             Title = "offers";
-            string url = "https://yastatic.net/market-export/_/partner/help/YML.xml";
-            XmlTextReader reader = new XmlTextReader(url);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(reader);
-            XmlNodeList offers = doc.GetElementsByTagName("offer");
+            getOfferList();
+            XmlNodeList offers = document.GetElementsByTagName("offer");
             foreach (XmlNode offer in offers)
             {
                 Offer o = new Offer();
@@ -31,23 +33,53 @@ namespace Notissimus
                 o.available = ac.GetNamedItem("available").Value.ToString();
                 XmlNodeList childNodes = offer.ChildNodes;
                 List<KeyValuePair<string, string>> childrenList = new List<KeyValuePair<string, string>>();
-
+                // Console.WriteLine("OFFER " + o.id);
                 foreach (XmlNode node in childNodes)
                 {
                     childrenList.Add(new KeyValuePair<string, string>(node.Name, node.InnerText));
+                    Debug.WriteLine("\n\n\n\n\n\n");
+                    Debug.WriteLine("<" + node.Name + "> " + node.InnerText + " </" + node.Name + ">");
                 }
                 o.childNodes = childrenList;
                 Offers.Add(o);
             }
-            List<string> IDs = new List<string>();
             foreach (Offer of in Offers)
             {
-                IDs.Add(of.id);// Debug.WriteLine(of.id);
+                 IDs.Add(of.id);
             }
 
-            ListView listView = (ListView)FindByName("listView");
-            listView.ItemsSource = IDs;
-            listView.ItemTapped += OnItemTapped;
+           ListView listView = (ListView)FindByName("listView");
+           listView.ItemsSource = IDs;
+           listView.ItemTapped += OnItemTapped;
+        }
+
+        private static void getOfferList()
+        {          
+            Task.Run(async () =>
+            {
+                HttpClient cl = new HttpClient();
+                using (Stream stream = await cl.GetStreamAsync("https://yastatic.net/market-export/_/partner/help/YML.xml"))
+                {
+                    using (XmlTextReader reader = new XmlTextReader(stream))
+                    {
+                        document.Load(reader);
+                    }
+                }
+            }).Wait();
+        }
+
+        private static async Task<XmlDocument> getREsponseAsync(string url)
+        {
+            HttpClient cl = new HttpClient();
+            XmlDocument document = new XmlDocument();
+            using (Stream stream = await cl.GetStreamAsync(url))
+            {
+                using (XmlTextReader reader = new XmlTextReader(stream))
+                {
+                    document.Load(reader);
+                }
+            }
+            return document;
         }
         async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
@@ -59,15 +91,14 @@ namespace Notissimus
             await Navigation.PushAsync(new OfferPage(json));
         }
 
+
         public class Offer
         {
             public string id, type, bid, cbid, available;
             public string json;
             public List<KeyValuePair<string, string>> childNodes;
             public Offer()
-            {
-
-            }
+            { }
             Offer(string id, string type, string bid, string cbid, string available)
             {
                 this.id = id;

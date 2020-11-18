@@ -16,8 +16,23 @@ namespace Notissimus
         {
             InitializeComponent();
             Title = "selected offer JSON";
-            offerLabel.Text = json;
+            StackLayout stack = new StackLayout();
+            Label offerLabel = new Label
+            {
+                Text = json,
+                HorizontalOptions = LayoutOptions.Center,
+                FontSize = 15,
+                Padding = 10
+            };
             offerLabel.TextColor = Color.FromRgb(215, 145, 0);
+            stack.Children.Add(offerLabel);
+            Content = new ScrollView { Content = stack };          
         }
+
+        //private async void back(object sender, EventArgs e)
+        //{
+        //    await Navigation.PopAsync();
+        //    Navigation.RemovePage(this);
+        //}
     }
 }
