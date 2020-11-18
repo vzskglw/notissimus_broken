@@ -5,8 +5,11 @@ using System.Text;
 namespace Notissimus
 {
     class Offer
-    {    
-        public string id, type, bid, cbid, available;
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public string available { get; set; }
+        public string bid, cbid;
         public string json;
         public List<KeyValuePair<string, string>> childNodes;
         public Offer()

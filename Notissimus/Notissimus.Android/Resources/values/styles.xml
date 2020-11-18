@@ -19,6 +19,12 @@
 	<style name="NotissimusTheme" parent="MainTheme.Base">
 		<item name="colorPrimary">@color/colorYellow</item>
 		<item name="colorPrimaryDark">@color/colorYellow</item>
-		<item name="colorAccent">@color/colorOrange</item>
-	</style>
+		<item name="colorAccent">@color/colorDarkYellow</item>
+		
+		<item name="android:colorPressedHighlight">@color/colorLightYellow</item>  
+        <item name="android:colorFocusedHighlight">@color/colorLightYellow</item>
+        <item name="android:colorActivatedHighlight">@color/colorLightYellow</item>
+        <item name="android:activatedBackgroundIndicator">@color/colorLightYellow</item>
+    </style>    
+	
 </resources>

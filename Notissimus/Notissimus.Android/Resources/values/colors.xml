@@ -5,5 +5,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 	<color name="colorYellow">#FFB400</color>
-	<color name="colorOrange">#FF8115</color>
+	<color name="colorDarkYellow">#FF8115</color>
+	<color name="colorLightYellow">#FFDB83</color>
 </resources>

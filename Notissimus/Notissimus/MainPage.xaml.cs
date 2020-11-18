@@ -18,11 +18,9 @@ namespace Notissimus
         public static XmlDocument document = new XmlDocument();
         public MainPage()
         {
-            InitializeComponent();
             Title = "offers";
             getXML();
 
-            List<string> idList = new List<string>();
             XmlNodeList offerNodes = document.GetElementsByTagName("offer");
             foreach (XmlNode offerNode in offerNodes)
             {
@@ -40,12 +38,44 @@ namespace Notissimus
                 }
                 offer.childNodes = childrenList;
                 Offers.Add(offer); 
-                idList.Add(offer.id);
             }
-           ListView listView = (ListView)FindByName("listView");
-           listView.ItemsSource = idList;
-           listView.ItemTapped += OnItemTapped;
+            ListView listView = new ListView
+            {
+                HasUnevenRows = true,
+                ItemsSource = Offers,
+
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    Label idLabel = new Label
+                    {
+                        Padding = new Thickness(10, 15),
+                        FontSize = 23, TextColor = Color.FromRgb(233, 133, 33) };
+                    idLabel.SetBinding(Label.TextProperty, "id");
+
+                    Label typeLabel = new Label
+                    {
+                        Padding = new Thickness(15, 18),
+                        FontSize = 16, TextColor = Color.FromRgb(250, 180, 50) };
+                    typeLabel.SetBinding(Label.TextProperty, "type");
+
+                    return new ViewCell
+                    {
+                        View = new StackLayout
+                        {
+                            Orientation = StackOrientation.Horizontal,
+                            Children = { idLabel, typeLabel }
+                        }
+                    };
+                })
+            };
+            listView.ItemTapped += OnItemTapped;
+
+            StackLayout stack = new StackLayout();            
+            stack.Children.Add(listView);
+            Content = new ScrollView { Content = stack };
+            InitializeComponent();
         }
+
 
         private static void getXML()
         {          
@@ -64,7 +94,8 @@ namespace Notissimus
 
         async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            string json = "", id = e.Item.ToString();
+            Offer selectedOffer = e.Item as Offer;
+            string json = "", id = selectedOffer.id;
             foreach (Offer offer in Offers)
             {
                 if (offer.id == id) { json = offer.getJSON(); break; }
