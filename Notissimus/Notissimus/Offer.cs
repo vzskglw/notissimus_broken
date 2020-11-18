@@ -9,8 +9,7 @@ namespace Notissimus
         public string id { get; set; }
         public string type { get; set; }
         public string available { get; set; }
-        public string bid, cbid;
-        public string json;
+        public string bid, cbid, json;
         public List<KeyValuePair<string, string>> childNodes;
         public Offer()
         { }
