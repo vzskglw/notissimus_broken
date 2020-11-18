@@ -1,0 +1,15 @@
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\bin\Debug\netstandard2.0\Notissimus.deps.json
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\bin\Debug\netstandard2.0\Notissimus.dll
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\bin\Debug\netstandard2.0\ref\Notissimus.dll
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\bin\Debug\netstandard2.0\Notissimus.pdb
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.csprojAssemblyReference.cache
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\OfferPage.xaml.g.cs
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.AssemblyInfoInputs.cache
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.AssemblyInfo.cs
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.csproj.CoreCompileInputs.cache
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.dll
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\ref\Notissimus.dll
+C:\Users\HP\vsp\xamarin\Notissimus\Notissimus\Notissimus\obj\Debug\netstandard2.0\Notissimus.pdb
