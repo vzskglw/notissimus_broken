@@ -14,51 +14,45 @@ namespace Notissimus
 {
     public partial class MainPage : ContentPage
     {
-        public static List<Offer> Offers = new List<Offer>();
-        public static List<string> IDs = new List<string>();
+        static List<Offer> Offers = new List<Offer>();
         public static XmlDocument document = new XmlDocument();
         public MainPage()
         {
             InitializeComponent();
             Title = "offers";
-            getOfferList();
-            XmlNodeList offers = document.GetElementsByTagName("offer");
-            foreach (XmlNode offer in offers)
+            getXML();
+
+            List<string> idList = new List<string>();
+            XmlNodeList offerNodes = document.GetElementsByTagName("offer");
+            foreach (XmlNode offerNode in offerNodes)
             {
-                Offer o = new Offer();
-                XmlAttributeCollection ac = offer.Attributes;
-                o.id = ac.GetNamedItem("id").Value.ToString();
-                o.type = ac.GetNamedItem("type").Value.ToString();
-                o.bid = ac.GetNamedItem("bid").Value.ToString();
-                o.available = ac.GetNamedItem("available").Value.ToString();
-                XmlNodeList childNodes = offer.ChildNodes;
+                Offer offer = new Offer();
+                XmlAttributeCollection offerAttributes = offerNode.Attributes;
+                offer.id = offerAttributes.GetNamedItem("id").Value.ToString();
+                offer.type = offerAttributes.GetNamedItem("type").Value.ToString();
+                offer.bid = offerAttributes.GetNamedItem("bid").Value.ToString();
+                offer.available = offerAttributes.GetNamedItem("available").Value.ToString();
+                XmlNodeList childNodes = offerNode.ChildNodes;
                 List<KeyValuePair<string, string>> childrenList = new List<KeyValuePair<string, string>>();
-                // Console.WriteLine("OFFER " + o.id);
                 foreach (XmlNode node in childNodes)
                 {
                     childrenList.Add(new KeyValuePair<string, string>(node.Name, node.InnerText));
-                    Debug.WriteLine("\n\n\n\n\n\n");
-                    Debug.WriteLine("<" + node.Name + "> " + node.InnerText + " </" + node.Name + ">");
                 }
-                o.childNodes = childrenList;
-                Offers.Add(o);
+                offer.childNodes = childrenList;
+                Offers.Add(offer); 
+                idList.Add(offer.id);
             }
-            foreach (Offer of in Offers)
-            {
-                 IDs.Add(of.id);
-            }
-
            ListView listView = (ListView)FindByName("listView");
-           listView.ItemsSource = IDs;
+           listView.ItemsSource = idList;
            listView.ItemTapped += OnItemTapped;
         }
 
-        private static void getOfferList()
+        private static void getXML()
         {          
             Task.Run(async () =>
             {
-                HttpClient cl = new HttpClient();
-                using (Stream stream = await cl.GetStreamAsync("https://yastatic.net/market-export/_/partner/help/YML.xml"))
+                HttpClient client = new HttpClient();
+                using (Stream stream = await client.GetStreamAsync("https://yastatic.net/market-export/_/partner/help/YML.xml"))
                 {
                     using (XmlTextReader reader = new XmlTextReader(stream))
                     {
@@ -68,19 +62,6 @@ namespace Notissimus
             }).Wait();
         }
 
-        private static async Task<XmlDocument> getREsponseAsync(string url)
-        {
-            HttpClient cl = new HttpClient();
-            XmlDocument document = new XmlDocument();
-            using (Stream stream = await cl.GetStreamAsync(url))
-            {
-                using (XmlTextReader reader = new XmlTextReader(stream))
-                {
-                    document.Load(reader);
-                }
-            }
-            return document;
-        }
         async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             string json = "", id = e.Item.ToString();
@@ -89,40 +70,6 @@ namespace Notissimus
                 if (offer.id == id) { json = offer.getJSON(); break; }
             }
             await Navigation.PushAsync(new OfferPage(json));
-        }
-
-
-        public class Offer
-        {
-            public string id, type, bid, cbid, available;
-            public string json;
-            public List<KeyValuePair<string, string>> childNodes;
-            public Offer()
-            { }
-            Offer(string id, string type, string bid, string cbid, string available)
-            {
-                this.id = id;
-                this.type = type;
-                this.bid = bid;
-                this.cbid = cbid;
-                this.available = available;
-            }
-            public string getJSON()
-            {
-                json += "offer = \n\t{";
-                json += "\t\"attributes\" : \n";
-                json += "\t\t\t\t{\"id\" : \"" + id + "\",\n";
-                json += "\t\t\t\t\"type\" : \"" + type + "\",\n";
-                json += "\t\t\t\t\"bid\" : \"" + bid + "\" }";
-                foreach (KeyValuePair<string, string> node in childNodes)
-                {
-                    json += ",\n";
-                    json += "\t\t\"" + node.Key + "\" : \"" + node.Value + "\"";
-                }
-
-                json += "\n\t}";
-                return json;
-            }
         }
     }
 }
